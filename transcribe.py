@@ -1,4 +1,4 @@
-import utils.utils as utils
+from utils.utils import *
 
 api_key = "<YOUR-API-KEY>"
 audio_file = "audio.mp3"
