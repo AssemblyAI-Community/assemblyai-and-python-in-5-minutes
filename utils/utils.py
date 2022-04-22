@@ -1,6 +1,5 @@
 import requests
 import time
-import json
 #import youtube_dl
 
 transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
