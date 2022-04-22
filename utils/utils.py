@@ -51,7 +51,7 @@ def _read_file(filename, chunk_size=5242880):
 def upload_file(audio_file, header):
 	upload_response = requests.post(
 	    upload_endpoint,
-	    header=header, data=_read_file(audio_file)
+	    headers=header, data=_read_file(audio_file)
 	)
 	upload_url = upload_response.json()
 
@@ -62,7 +62,7 @@ def request_transcript(upload_url, header):
 	transcript_request = {
     	'audio_url': upload_url['upload_url']
 	}
-	transcript_response = requests.post(transcript_endpoint, json=transcript_request, header=header)
+	transcript_response = requests.post(transcript_endpoint, json=transcript_request, headers=header)
 	transcript_response = transcript_response.json()
 	return transcript_response
 
@@ -75,7 +75,7 @@ def make_polling_endpoint(transcript_response):
 # Wait for the transcript to finish
 def wait_for_completion(polling_endpoint, header):
 	while True:
-	    polling_response = requests.get(polling_endpoint, header=header)    
+	    polling_response = requests.get(polling_endpoint, headers=header)    
 	    polling_response = polling_response.json()
 
 	    if polling_response['status'] == 'completed':
@@ -85,7 +85,7 @@ def wait_for_completion(polling_endpoint, header):
 
 # Get the paragraphs of the transcript
 def get_paragraphs(polling_endpoint, header):
-	paragraphs_response = requests.get(polling_endpoint + "/paragraphs", header=header)
+	paragraphs_response = requests.get(polling_endpoint + "/paragraphs", headers=header)
 
 	paragraphs = []
 	paras = []
