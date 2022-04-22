@@ -1,12 +1,13 @@
 import utils.utils as utils
 
 api_key = "<YOUR-API-KEY>"
+audio_file = "audio.mp3"
 
 # Create header with authorization along with AssemblyAI API requests
 headers = make_headers(api_key)
 
 # Upload the audio file to AssemblyAI
-upload_url = upload_file("audio.mp3", headers)
+upload_url = upload_file(audio_file, headers)
 
 # Request a transcription
 transcript_response = request_transcript(upload_url, headers)
