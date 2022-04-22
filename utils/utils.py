@@ -30,7 +30,7 @@ def download_video(ffmpeg_path=".\\FFmpeg\\bin", yt_link='https://www.youtube.co
 	return meta
 
 # Make headers for AAI API
-def make_headers(api_key):
+def make_header(api_key):
 	headers_auth_only = {"authorization": api_key}
 	headers = {
 	    "authorization": api_key,
