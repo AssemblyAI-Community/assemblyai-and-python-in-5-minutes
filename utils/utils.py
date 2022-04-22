@@ -29,14 +29,14 @@ def download_video(ffmpeg_path=".\\FFmpeg\\bin", yt_link='https://www.youtube.co
 
 	return meta
 
-# Make headers for AAI API
+# Make header for AAI API
 def make_header(api_key):
-	headers_auth_only = {"authorization": api_key}
-	headers = {
+	header_auth_only = {"authorization": api_key}
+	header = {
 	    "authorization": api_key,
 	    "content-type": "application/json"
 	}
-	return headers
+	return header
 
 # Helper for `upload_file()`
 def _read_file(filename, chunk_size=5242880):
@@ -48,21 +48,21 @@ def _read_file(filename, chunk_size=5242880):
             yield data
 
 # Uploads a file to AAI servers
-def upload_file(audio_file, headers):
+def upload_file(audio_file, header):
 	upload_response = requests.post(
 	    upload_endpoint,
-	    headers=headers, data=_read_file(audio_file)
+	    header=header, data=_read_file(audio_file)
 	)
 	upload_url = upload_response.json()
 
 	return upload_url
 
 # Request transcript for file uploaded to AAI servers
-def request_transcript(upload_url, headers):
+def request_transcript(upload_url, header):
 	transcript_request = {
     	'audio_url': upload_url['upload_url']
 	}
-	transcript_response = requests.post(transcript_endpoint, json=transcript_request, headers=headers)
+	transcript_response = requests.post(transcript_endpoint, json=transcript_request, header=header)
 	transcript_response = transcript_response.json()
 	return transcript_response
 
@@ -73,9 +73,9 @@ def make_polling_endpoint(transcript_response):
 	return polling_endpoint
 
 # Wait for the transcript to finish
-def wait_for_completion(polling_endpoint, headers):
+def wait_for_completion(polling_endpoint, header):
 	while True:
-	    polling_response = requests.get(polling_endpoint, headers=headers)    
+	    polling_response = requests.get(polling_endpoint, header=header)    
 	    polling_response = polling_response.json()
 
 	    if polling_response['status'] == 'completed':
@@ -84,8 +84,8 @@ def wait_for_completion(polling_endpoint, headers):
 	    time.sleep(5)
 
 # Get the paragraphs of the transcript
-def get_paragraphs(polling_endpoint, headers):
-	paragraphs_response = requests.get(polling_endpoint + "/paragraphs", headers=headers)
+def get_paragraphs(polling_endpoint, header):
+	paragraphs_response = requests.get(polling_endpoint + "/paragraphs", header=header)
 
 	paragraphs = []
 	paras = []
