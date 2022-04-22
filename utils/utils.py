@@ -2,8 +2,8 @@ import requests
 import time
 #import youtube_dl
 
-transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
 upload_endpoint = "https://api.assemblyai.com/v2/upload"
+transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
 
 # Create youtube_dl options dictionary
 def _make_ydl_opts(ffmpeg_path):
