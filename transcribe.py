@@ -27,5 +27,7 @@ wait_for_completion(polling_endpoint, header)
 paras = get_paragraphs(polling_endpoint, header)
 
 # Print out the transcript paragraphs
-for para in paras:
-    print(para['text'], '\n')
+with open('transcription.txt.', 'w') as f:
+	for para in paras:
+    		print(para['text'], '\n')
+    		f.write(para['text'] + '\n')
