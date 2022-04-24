@@ -1,7 +1,12 @@
 from utils.utils import *
 
-api_key = "<YOUR-API-KEY>"
-audio_file = "audio.mp3"
+if len(sys.argv) == 3:
+	api_key = sys.argv[2]
+	audio_file = sys.argv[1]
+else:
+	api_key = "<YOUR-API-KEY>"
+	audio_file = "audio.mp3"
+	
 #audio_file = "https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3"
 local = True
 
