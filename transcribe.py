@@ -1,4 +1,5 @@
 from utils.utils import *
+import sys
 
 if len(sys.argv) == 3:
 	api_key = sys.argv[2]
@@ -6,9 +7,11 @@ if len(sys.argv) == 3:
 else:
 	api_key = "<YOUR-API-KEY>"
 	audio_file = "audio.mp3"
-	
-#audio_file = "https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3"
+	#audio_file = "https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3"
+
+# Whether or not the file is local
 local = True
+
 
 # Create header with authorization along with AssemblyAI API requests
 header = make_header(api_key)
