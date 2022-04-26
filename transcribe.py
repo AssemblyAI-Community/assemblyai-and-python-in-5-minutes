@@ -1,41 +1,41 @@
-from utils.utils import *
-import sys
-
-if len(sys.argv) == 3:
-	api_key = sys.argv[2]
-	audio_file = sys.argv[1]
-else:
-	api_key = "<YOUR-API-KEY>"
-	audio_file = "audio.mp3"
-	#audio_file = "https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3"
-
-# Whether or not the file is local
-local = True
+import argparse
+import utils
 
 
-# Create header with authorization along with AssemblyAI API requests
-header = make_header(api_key)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('api_key', help='<YOUR-API-KEY>')
+    parser.add_argument('audio_file', help='url to file or local audio filename')
+    parser.add_argument('--local',action='store_true', help='must be set if audio_file is a local filename')
 
-if local:
-	# Upload the audio file to AssemblyAI
-	upload_url = upload_file(audio_file, header)
-else:
-	upload_url = {'upload_url': audio_file}
-	
-# Request a transcription
-transcript_response = request_transcript(upload_url, header)
+    args = parser.parse_args()
 
-# Create a polling endpoint that will let us check when the transcription is complete
-polling_endpoint = make_polling_endpoint(transcript_response)
+    # Create header with authorization along with content-type
+    header = {
+        'authorization': args.api_key,
+        'content-type': 'application/json'
+    }
 
-# Wait until the transcription is complete
-wait_for_completion(polling_endpoint, header)
+    if args.local:
+        # Upload the audio file to AssemblyAI
+        upload_url = utils.upload_file(args.audio_file, header)
+    else:
+        upload_url = {'upload_url': args.audio_file}
 
-# Request the paragraphs of the transcript
-paras = get_paragraphs(polling_endpoint, header)
+    # Request a transcription
+    transcript_response = utils.request_transcript(upload_url, header)
 
-# Save and print transcript
-with open('transcript.txt', 'w') as f:
-	for para in paras:
-    		print(para['text'], '\n')
-    		f.write(para['text'] + '\n')
+    # Create a polling endpoint that will let us check when the transcription is complete
+    polling_endpoint = utils.make_polling_endpoint(transcript_response)
+
+    # Wait until the transcription is complete
+    utils.wait_for_completion(polling_endpoint, header)
+
+    # Request the paragraphs of the transcript
+    paragraphs = utils.get_paragraphs(polling_endpoint, header)
+
+    # Save and print transcript
+    with open('transcript.txt', 'w') as f:
+        for para in paragraphs:
+            print(para['text'] + '\n')
+            f.write(para['text'] + '\n')
