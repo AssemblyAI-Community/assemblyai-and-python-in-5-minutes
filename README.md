@@ -11,18 +11,20 @@ $ pip install requests
 
 ## Usage:
 
+If your AssemblyAI API key is stored in the `api_key.txt` file, then you can omit the optional `--api_key` argument.
+
 ```console
-$ python transcribe.py api_key audio_file [--local]
+$ python transcribe.py audio_file [--local] [--api_key=<YOUR-API-KEY>"]
 ```
 
 Example for hosted file:
 
 ```console
-$ python transcribe.py <YOUR-API-KEY> https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3
+$ python transcribe.py https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3 --api_key=<YOUR-API-KEY>
 ```
 
 Example for local file:
 
 ```console
-$ python transcribe.py <YOUR-API-KEY> audio.mp3 --local
+$ python transcribe.py <YOUR-API-KEY> audio.mp3 --local --api_key=<YOUR-API-KEY>
 ```
