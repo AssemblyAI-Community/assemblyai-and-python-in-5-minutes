@@ -15,6 +15,7 @@ def _read_file(filename, chunk_size=5242880):
                 break
             yield data
 
+
 # Uploads a file to AAI servers
 def upload_file(audio_file, header):
     upload_response = requests.post(
@@ -22,6 +23,7 @@ def upload_file(audio_file, header):
         headers=header, data=_read_file(audio_file)
     )
     return upload_response.json()
+
 
 # Request transcript for file uploaded to AAI servers
 def request_transcript(upload_url, header):
@@ -35,11 +37,13 @@ def request_transcript(upload_url, header):
     )
     return transcript_response.json()
 
+
 # Make a polling endpoint
 def make_polling_endpoint(transcript_response):
     polling_endpoint = "https://api.assemblyai.com/v2/transcript/"
     polling_endpoint += transcript_response['id']
     return polling_endpoint
+
 
 # Wait for the transcript to finish
 def wait_for_completion(polling_endpoint, header):
@@ -51,6 +55,7 @@ def wait_for_completion(polling_endpoint, header):
             break
 
         time.sleep(5)
+
 
 # Get the paragraphs of the transcript
 def get_paragraphs(polling_endpoint, header):
