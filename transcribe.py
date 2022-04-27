@@ -1,6 +1,6 @@
 import argparse
-import utils
 import os
+import utils
 
 
 def main():
