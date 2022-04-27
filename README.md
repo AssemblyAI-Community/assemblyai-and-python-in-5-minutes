@@ -20,7 +20,7 @@ $ python transcribe.py audio_file [--local] [--api_key=<YOUR-API-KEY>"]
 Example for hosted file:
 
 ```console
-$ python transcribe.py https://github.com/AssemblyAI-Examples/speech-recognition-in-5-minutes-with-python/raw/main/audio.mp3 --api_key=<YOUR-API-KEY>
+$ python transcribe.py https://github.com/AssemblyAI-Examples/assemblyai-and-python-in-5-minutes/blob/main/audio.mp3 --api_key=<YOUR-API-KEY>
 ```
 
 Example for local file:
