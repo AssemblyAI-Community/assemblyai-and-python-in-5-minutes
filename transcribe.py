@@ -1,21 +1,22 @@
 import argparse
 import utils
+import os
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('audio_file', help='url to file or local audio filename')
     parser.add_argument('--local', action='store_true', help='must be set if audio_file is a local filename')
-    parser.add_argument('--api_key', action='store',  help='<YOUR-API-KEY>')
+    parser.add_argument('--api_key', action='store', help='<YOUR-API-KEY>')
 
     args = parser.parse_args()
 
     if args.api_key is None:
-        with open("api_key.txt", "r") as f:
-            lines = f.readlines()
-
-        args.api_key = lines[0].strip()
-
+        args.api_key = os.getenv("AAI_API_KEY")
+        if args.api_key is None:
+            print("AAI_API_KEY environment variable not set. Try setting it now, or passing in your API key"
+                  " as a command line argument with `--api_key`")
+            return
 
     # Create header with authorization along with content-type
     header = {
@@ -46,3 +47,8 @@ if __name__ == '__main__':
         for para in paragraphs:
             print(para['text'] + '\n')
             f.write(para['text'] + '\n')
+
+    return
+
+if __name__ == '__main__':
+    main()
