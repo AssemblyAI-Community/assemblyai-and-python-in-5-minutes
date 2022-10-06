@@ -1,6 +1,19 @@
 import argparse
+import math
 import os
+import sys
 import utils
+
+
+def write_welcome_banner():
+    terminal_size = os.get_terminal_size().columns
+    sys.stdout.write("#" * terminal_size + "\n")
+    sys.stdout.write(
+        "#" * math.floor((terminal_size - 15) / 2) +
+        "  Assembly AI  " +
+        "#" * math.ceil((terminal_size - 15) / 2) + "\n"
+    )
+    sys.stdout.write("#" * os.get_terminal_size().columns + "\n\n")
 
 
 def main():
@@ -23,15 +36,20 @@ def main():
         'content-type': 'application/json'
     }
 
+    write_welcome_banner()
+    sys.stdout.write("Uploading files...\r")
+
     if args.local:
         # Upload the audio file to AssemblyAI
         upload_url = utils.upload_file(args.audio_file, header)
     else:
         upload_url = {'upload_url': args.audio_file}
 
+    sys.stdout.write("Requesting Transcript...\r")
     # Request a transcription
     transcript_response = utils.request_transcript(upload_url, header)
 
+    sys.stdout.write("Beginning Transcription...\r")
     # Create a polling endpoint that will let us check when the transcription is complete
     polling_endpoint = utils.make_polling_endpoint(transcript_response)
 

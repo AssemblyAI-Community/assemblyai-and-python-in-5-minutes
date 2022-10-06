@@ -1,9 +1,27 @@
+import sys
 import requests
 import time
 
 
 upload_endpoint = "https://api.assemblyai.com/v2/upload"
 transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
+
+
+# Adds a progress bar to the terminal
+def progress(count, total=5 * 60, status=''):
+    """
+    Copied from https://gist.github.com/vladignatyev/06860ec2040cb497f0f3
+    """
+
+    bar_len = 60
+    capped_count = min(count, 300)
+    filled_len = int(round(bar_len * capped_count / float(total)))
+    percents = round(100.0 * capped_count / float(total), 1)
+    bar = f"{'=' * filled_len}{'-' * (bar_len - filled_len)}"
+
+    sys.stdout.write("\033[K")
+    sys.stdout.write('%s: [%s] %s%s\r' % (status, bar, percents, '%'))
+    sys.stdout.flush()
 
 
 # Helper for `upload_file()`
@@ -47,14 +65,24 @@ def make_polling_endpoint(transcript_response):
 
 # Wait for the transcript to finish
 def wait_for_completion(polling_endpoint, header):
+    delay = 0.25
+    backoff = 2
+
+    progress_counter = 0
+    progress(progress_counter, status="Transcribing")
     while True:
         polling_response = requests.get(polling_endpoint, headers=header)
         polling_response = polling_response.json()
 
         if polling_response['status'] == 'completed':
+            progress(300, status="Completed")
             break
 
-        time.sleep(5)
+        time.sleep(delay)
+        progress_counter += 2 * delay
+        progress(progress_counter, status="Transcribing")
+        if delay <= 5:
+            delay *= backoff
 
 
 # Get the paragraphs of the transcript
